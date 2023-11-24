@@ -74,7 +74,8 @@ model Shortcode {
   creatorUid      String?
   User            User?    @relation(fields: [creatorUid], references: [uid])
   createdOn       DateTime @default(now())
-  updatedOn       DateTime @updatedAt @default(now())
+  updatedOn       DateTime @default(now()) @updatedAt
+
   @@unique(fields: [id, creatorUid], name: "creator_uid_shortcode_unique")
 }
 
@@ -205,4 +206,13 @@ enum TeamMemberRole {
   OWNER
   VIEWER
   EDITOR
+}
+
+model InfraConfig {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  value     String?
+  active    Boolean  @default(true) // Use case: Let's say, Admin wants to disable Google SSO, but doesn't want to delete the config
+  createdOn DateTime @default(now()) @db.Timestamp(3)
+  updatedOn DateTime @updatedAt @db.Timestamp(3)
 }
